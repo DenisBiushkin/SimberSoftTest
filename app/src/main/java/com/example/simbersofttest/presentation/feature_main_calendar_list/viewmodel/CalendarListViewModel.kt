@@ -29,6 +29,8 @@ import javax.inject.Inject
 
 
 @HiltViewModel
+//TODO разделить показывание недели на 7 дней как при выборе
+//TODO если задач нет сделать добавление через нажатие на пустой элемент в списке
 class CalendarListViewModel  @Inject constructor(
     private val getTasksByDateUseCase: GetTasksByDateUseCase,
     private val taskRepository: TaskRepository
@@ -46,9 +48,9 @@ class CalendarListViewModel  @Inject constructor(
 
     init {
         //TODO убрать до релиза
-        viewModelScope.launch {
-            taskRepository.addTask( TaskTestData.list.first())
-        }
+//        viewModelScope.launch {
+//            taskRepository.addTask( TaskTestData.list.first())
+//        }
 
         initializeDefaultState()
     }

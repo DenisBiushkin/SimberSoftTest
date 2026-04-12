@@ -1,6 +1,7 @@
 package com.example.simbersofttest.data.source.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -17,4 +18,11 @@ interface TaskDao {
 
     @Query("SELECT * FROM tasks WHERE id = :id")
     suspend fun getTaskById(id: Int): TaskEntity?
+
+    @Query("DELETE FROM tasks WHERE id = :id")
+    suspend fun deleteTaskById(id: Int)
+
+    @Delete
+    suspend fun deleteTask(task: TaskEntity)
+
 }

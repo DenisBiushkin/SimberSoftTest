@@ -26,6 +26,10 @@ class TaskRepositoryImpl @Inject constructor(
     override suspend fun getTaskById(id: Int): Task? {
         return taskDao.getTaskById(id)?.toDomain()
     }
+
+    override suspend fun deleteTaskById(id: Int) {
+        taskDao.deleteTaskById(id)
+    }
 }
 fun TaskEntity.toDomain() =
     Task(id, dateStart, dateFinish, name, description, TaskCategoryMapper.fromInt(category))
