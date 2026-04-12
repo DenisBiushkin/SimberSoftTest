@@ -6,6 +6,7 @@ import com.example.simbersofttest.domain.usecases.AddTaskUseCase
 import com.example.simbersofttest.presentation.feature_create_task.model.AddTaskUiEffect
 import com.example.simbersofttest.presentation.feature_create_task.model.AddTaskEvent
 import com.example.simbersofttest.presentation.feature_create_task.model.AddTaskState
+import com.example.simbersofttest.presentation.feature_create_task.model.TaskCategoryUi.Companion.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -86,7 +87,7 @@ class AddTaskViewModel @Inject constructor(
                     description = currentState.description,
                     dateMillis = currentState.selectedDateMillis,
                     hour = currentState.startHour,
-                    category = currentState.category.name
+                    category = currentState.category.toDomain()
                 )
 
                 sendEffect(AddTaskUiEffect.NavigateBack)

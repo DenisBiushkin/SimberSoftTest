@@ -5,7 +5,7 @@ data class AddTaskState(
     val description: String = "",
     val selectedDateMillis: Long = System.currentTimeMillis(),
     val startHour: Int = 10,
-    val category: TaskCategory = TaskCategory.WORK,
+    val category: TaskCategoryUi = TaskCategoryUi.WORK,
     val isDatePickerOpen: Boolean = false
 )
 

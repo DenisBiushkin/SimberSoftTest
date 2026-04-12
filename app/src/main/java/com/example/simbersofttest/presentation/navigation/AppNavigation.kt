@@ -44,7 +44,7 @@ fun AppNavigation(
         // Экран создания
         composable(Screens.CreateTask.route) {
             AddTaskScreen(onNavigateBack = {
-
+                navController.navigate(Screens.Main.route)
             })
         }
     }
