@@ -27,5 +27,7 @@ class TaskRepositoryImpl @Inject constructor(
         return taskDao.getTaskById(id)?.toDomain()
     }
 }
-fun TaskEntity.toDomain() = Task(id, dateStart, dateFinish, name, description)
-fun Task.toEntity() = TaskEntity(id,  name, description,dateStart, dateFinish)
+fun TaskEntity.toDomain() =
+    Task(id, dateStart, dateFinish, name, description, TaskCategoryMapper.fromInt(category))
+fun Task.toEntity() =
+    TaskEntity(id,  name, description,dateStart, dateFinish,TaskCategoryMapper.toInt(category))
