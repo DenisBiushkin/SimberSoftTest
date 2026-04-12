@@ -13,33 +13,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
-import com.example.simbersofttest.data.AppDatabase
-import com.example.simbersofttest.data.User
+import com.example.simbersofttest.data.source.db.AppDatabase
+import com.example.simbersofttest.data.source.entity.TaskEntity
+import com.example.simbersofttest.domain.repository.TaskRepository
 import com.example.simbersofttest.presentation.theme.SimbersoftTestTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var db :AppDatabase
+    @Inject
+    lateinit var taskRepository: TaskRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        val db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "test-db"
-        ).build()
 
         lifecycleScope.launch {
-            val userDao = db.userDao()
+            val taskEntity= TaskEntity(
+                name = "Test",
+                description = "test description",
+                dateStart = 123456L,
+                dateFinish = 123456L
+            )
 
-            //Записываем
-            userDao.insert(User(name = "Gemini Test"))
 
-            // Читаем
-            val users = userDao.getAll()
-            println("Room Work: ${users.size} users in DB")
+            db.taskDao().insertTask(taskEntity)
+            println(db.taskDao().getTaskById(1))
         }
+
+        enableEdgeToEdge()
         setContent {
             SimbersoftTestTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
