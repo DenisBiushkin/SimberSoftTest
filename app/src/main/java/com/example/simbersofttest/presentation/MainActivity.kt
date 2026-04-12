@@ -12,42 +12,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
-import com.example.simbersofttest.data.AppDatabase
-import com.example.simbersofttest.data.User
+import com.example.simbersofttest.data.source.db.AppDatabase
+import com.example.simbersofttest.data.source.entity.TaskEntity
+import com.example.simbersofttest.domain.repository.TaskRepository
+import com.example.simbersofttest.presentation.navigation.AppNavigation
 import com.example.simbersofttest.presentation.theme.SimbersoftTestTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var db :AppDatabase
+    @Inject
+    lateinit var taskRepository: TaskRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "test-db"
-        ).build()
-
-        lifecycleScope.launch {
-            val userDao = db.userDao()
-
-            //Записываем
-            userDao.insert(User(name = "Gemini Test"))
-
-            // Читаем
-            val users = userDao.getAll()
-            println("Room Work: ${users.size} users in DB")
-        }
         setContent {
             SimbersoftTestTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                AppNavigation(rememberNavController())
             }
         }
     }
