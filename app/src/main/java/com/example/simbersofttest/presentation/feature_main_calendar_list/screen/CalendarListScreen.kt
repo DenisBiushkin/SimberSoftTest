@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +29,7 @@ import com.example.simbersofttest.presentation.feature_main_calendar_list.compon
 import com.example.simbersofttest.presentation.feature_main_calendar_list.components.HeaderSection
 import com.example.simbersofttest.presentation.feature_main_calendar_list.components.TimelineSection
 import com.example.simbersofttest.presentation.feature_main_calendar_list.model.CalendarListEvent
+import com.example.simbersofttest.presentation.feature_main_calendar_list.model.CalendarUiEffect
 import com.example.simbersofttest.presentation.feature_main_calendar_list.viewmodel.CalendarListViewModel
 
 
@@ -39,6 +41,17 @@ fun CalendarListScreen(
     onCreateTaskClick: ()-> Unit
 ) {
     val state = viewModel.state.collectAsState();
+
+    // Слушаем навигационные эффекты
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is CalendarUiEffect.NavigateToDetails -> onTaskClick(effect.taskId)
+                is CalendarUiEffect.NavigateToCreateTask -> onCreateTaskClick()
+            }
+        }
+    }
+
     // Основной контент экрана
     Scaffold(
         floatingActionButton = {
