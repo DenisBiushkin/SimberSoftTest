@@ -1,12 +1,16 @@
 package com.example.simbersofttest.presentation.feature_create_task.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +32,7 @@ import com.example.simbersofttest.presentation.feature_create_task.model.AddTask
 import com.example.simbersofttest.presentation.feature_create_task.model.AddTaskState
 import com.example.simbersofttest.presentation.feature_create_task.model.AddTaskUiEffect
 import com.example.simbersofttest.presentation.feature_create_task.viewmodel.AddTaskViewModel
+import com.example.simbersofttest.сonstants.Constants.TAG
 
 
 @Composable
@@ -42,16 +47,27 @@ fun AddTaskScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
-                is AddTaskUiEffect.NavigateBack -> onNavigateBack()
+                is AddTaskUiEffect.NavigateBack -> {
+                    onNavigateBack()
+                }
                 is AddTaskUiEffect.ShowError -> {
-                    snackbarHostState.showSnackbar(message = effect.message)
+                    //snackbarHostState привязан к Scaffold
+                    snackbarHostState.currentSnackbarData?.dismiss()
+                    snackbarHostState.showSnackbar(
+                        message = effect.message,
+                        actionLabel = "ОК",
+                        duration = SnackbarDuration.Short
+                    )
                 }
             }
         }
     }
 
     Scaffold(
+        modifier = Modifier.statusBarsPadding(),
         containerColor = Color.White,
+        //хост для снекбаров
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             AddTaskTopBar(
                 onCancel = { viewModel.onEvent(AddTaskEvent.OnCancelClick) },
@@ -65,7 +81,7 @@ fun AddTaskScreen(
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
                 .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(28.dp)
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             TaskTitleAndDescription(
                 title = state.value.title,

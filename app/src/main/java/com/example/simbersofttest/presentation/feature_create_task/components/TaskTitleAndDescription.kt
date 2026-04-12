@@ -3,8 +3,10 @@ package com.example.simbersofttest.presentation.feature_create_task.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 
 
 import androidx.compose.runtime.Composable
@@ -24,7 +26,7 @@ fun TaskTitleAndDescription(
     onTitleChange: (String) -> Unit,
     onDescChange: (String) -> Unit
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(28.dp)) {
         BasicTextField(
             value = title,
             onValueChange = onTitleChange,
@@ -34,7 +36,7 @@ fun TaskTitleAndDescription(
                 color = Slate900
             ),
             decorationBox = { innerTextField ->
-                if (title.isEmpty()) Text("Название дела", color = Slate300, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                if (title.isEmpty()) Text("Заголовок", color = Slate300, fontSize = 24.sp, fontWeight = FontWeight.Bold)
                 innerTextField()
             },
             modifier = Modifier.fillMaxWidth()
@@ -48,7 +50,7 @@ fun TaskTitleAndDescription(
                 color = Slate500
             ),
             decorationBox = { innerTextField ->
-                if (description.isEmpty()) Text("Краткое описание...", color = Slate300, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                if (description.isEmpty()) Text("Описание...", color = Slate300, fontSize = 18.sp, fontWeight = FontWeight.Medium)
                 innerTextField()
             },
             modifier = Modifier.fillMaxWidth()

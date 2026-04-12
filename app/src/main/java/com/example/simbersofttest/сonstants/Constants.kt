@@ -15,4 +15,7 @@ object Constants {
     val Blue100 = Color(0xFFDBEAFE)
     val Blue500 = Color(0xFF3B82F6)
     val Blue600 = Color(0xFF2563EB)
+
+
+    val TAG="MyTag"
 }

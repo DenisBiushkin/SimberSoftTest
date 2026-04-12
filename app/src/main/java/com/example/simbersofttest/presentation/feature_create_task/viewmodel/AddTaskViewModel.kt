@@ -1,5 +1,6 @@
 package com.example.simbersofttest.presentation.feature_create_task.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.simbersofttest.domain.usecases.AddTaskUseCase
@@ -7,6 +8,7 @@ import com.example.simbersofttest.presentation.feature_create_task.model.AddTask
 import com.example.simbersofttest.presentation.feature_create_task.model.AddTaskEvent
 import com.example.simbersofttest.presentation.feature_create_task.model.AddTaskState
 import com.example.simbersofttest.presentation.feature_create_task.model.TaskCategoryUi.Companion.toDomain
+import com.example.simbersofttest.сonstants.Constants.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,11 +79,18 @@ class AddTaskViewModel @Inject constructor(
         val currentState = _state.value
         if (currentState.title.isBlank()) {
             sendEffect(AddTaskUiEffect.ShowError("Название задачи не может быть пустым"))
+            Log.d(TAG,"Ошибка заполнения поля")
+            return
+        }
+        if (currentState.title.isBlank()) {
+            sendEffect(AddTaskUiEffect.ShowError("Описание задачи не может быть пустым"))
+            Log.d(TAG,"Ошибка заполнения поля")
             return
         }
 
         viewModelScope.launch {
             try {
+                //TODO переделать под Task
                 addTaskUseCase.execute(
                     title = currentState.title,
                     description = currentState.description,
@@ -100,6 +109,7 @@ class AddTaskViewModel @Inject constructor(
 
     private fun sendEffect(effect: AddTaskUiEffect) {
         viewModelScope.launch {
+            Log.d(TAG,"Выход из экрана Создания задачи")
             _uiEffect.emit(effect)
         }
     }

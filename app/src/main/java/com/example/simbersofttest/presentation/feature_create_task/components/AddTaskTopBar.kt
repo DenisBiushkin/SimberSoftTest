@@ -45,9 +45,9 @@ fun AddTaskTopBar(onCancel: () -> Unit, onDone: () -> Unit) {
         ) {
             Icon(Icons.Default.Close, contentDescription = "Отмена", tint = Slate400)
         }
-        Text("Новое событие", fontWeight = FontWeight.Bold, color = Slate900, fontSize = 16.sp)
+        Text("Новое событие", fontWeight = FontWeight.Bold, color = Slate900, fontSize = 20.sp)
         Text(
-            "Готово", Modifier.clickable { onDone() }, Blue600, fontWeight = FontWeight.ExtraBold
+            "Сохранить", Modifier.clickable { onDone() }, Blue600, fontWeight = FontWeight.ExtraBold
         )
     }
 }
