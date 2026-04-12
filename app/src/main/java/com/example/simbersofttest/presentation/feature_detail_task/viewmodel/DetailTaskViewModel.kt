@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.simbersofttest.domain.repository.TaskRepository
 import com.example.simbersofttest.domain.usecases.DeleteTaskUseCase
+import com.example.simbersofttest.domain.usecases.GetTaskDetailsUseCase
 import com.example.simbersofttest.presentation.feature_detail_task.model.TaskDetailVMState
 import com.example.simbersofttest.presentation.feature_detail_task.model.TaskDetailsEffect
 import com.example.simbersofttest.presentation.feature_detail_task.model.TaskDetailsEvent
@@ -27,8 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 //TODO добавить редактирование задачи
 class DetailTaskViewModel @Inject constructor(
-    private val repository: TaskRepository,
     private val deleteTaskUseCase: DeleteTaskUseCase,
+    private val getTaskDetailById: GetTaskDetailsUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
@@ -72,8 +73,9 @@ class DetailTaskViewModel @Inject constructor(
         //TODO спрятать всю логику в Usecase
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, errorMessage = null) }
+
             try {
-                val task = repository.getTaskById(taskId)
+                val task = getTaskDetailById.invoke(taskId)
 
                 if (task != null) {
                     _state.update {
