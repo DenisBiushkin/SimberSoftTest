@@ -1,7 +1,6 @@
 package com.example.simbersofttest.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -9,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.simbersofttest.presentation.feature_detail_task.TaskDetailScreen
-import com.example.simbersofttest.presentation.feature_main_calendar_list.components.CalendarListScreen
+import com.example.simbersofttest.presentation.feature_main_calendar_list.screen.CalendarListScreen
 
 @Composable
 fun AppNavigation(
