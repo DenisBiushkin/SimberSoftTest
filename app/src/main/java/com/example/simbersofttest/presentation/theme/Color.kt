@@ -1,4 +1,4 @@
-package com.example.simbersofttest.ui.theme
+package com.example.simbersofttest.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
