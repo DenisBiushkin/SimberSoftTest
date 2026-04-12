@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.simbersofttest.presentation.feature_create_task.screen.AddTaskScreen
 import com.example.simbersofttest.presentation.feature_detail_task.TaskDetailScreen
 import com.example.simbersofttest.presentation.feature_main_calendar_list.screen.CalendarListScreen
 
@@ -42,7 +43,9 @@ fun AppNavigation(
 
         // Экран создания
         composable(Screens.CreateTask.route) {
+            AddTaskScreen(onNavigateBack = {
 
+            })
         }
     }
 }
