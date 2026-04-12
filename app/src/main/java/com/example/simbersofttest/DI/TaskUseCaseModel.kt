@@ -4,6 +4,7 @@ import com.example.simbersofttest.data.repository.TaskRepositoryImpl
 import com.example.simbersofttest.data.source.dao.TaskDao
 import com.example.simbersofttest.domain.repository.TaskRepository
 import com.example.simbersofttest.domain.usecases.AddTaskUseCase
+import com.example.simbersofttest.domain.usecases.DeleteTaskUseCase
 import com.example.simbersofttest.domain.usecases.GetTasksByDateUseCase
 import dagger.Module
 import dagger.Provides
@@ -26,5 +27,11 @@ object TaskUseCaseModel {
     @Singleton
     fun provideAddTaskUseCase(taskTaskRepository:TaskRepository): AddTaskUseCase {
         return AddTaskUseCase(taskTaskRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteTaskUseCase(taskTaskRepository:TaskRepository): DeleteTaskUseCase {
+        return DeleteTaskUseCase(taskTaskRepository)
     }
 }
