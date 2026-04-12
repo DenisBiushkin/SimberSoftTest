@@ -101,7 +101,7 @@ class DetailTaskViewModel @Inject constructor(
     private fun deleteTask() {
         viewModelScope.launch {
             try {
-                // Предполагается, что deleteTaskUseCase тоже suspend
+                //suspend не flow
                 deleteTaskUseCase(taskId)
                 _effect.send(TaskDetailsEffect.NavigateBack)
             } catch (e: Exception) {

@@ -28,7 +28,7 @@ class TaskRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteTaskById(id: Int) {
-            TODO("Not yet implemented")
+        taskDao.deleteTaskById(id)
     }
 }
 fun TaskEntity.toDomain() =

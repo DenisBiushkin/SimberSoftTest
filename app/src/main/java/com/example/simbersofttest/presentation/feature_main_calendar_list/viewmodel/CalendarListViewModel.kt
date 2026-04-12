@@ -48,9 +48,9 @@ class CalendarListViewModel  @Inject constructor(
 
     init {
         //TODO убрать до релиза
-        viewModelScope.launch {
-            taskRepository.addTask( TaskTestData.list.first())
-        }
+//        viewModelScope.launch {
+//            taskRepository.addTask( TaskTestData.list.first())
+//        }
 
         initializeDefaultState()
     }
