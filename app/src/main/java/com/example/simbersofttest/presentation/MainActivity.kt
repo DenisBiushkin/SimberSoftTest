@@ -12,10 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import com.example.simbersofttest.data.source.db.AppDatabase
 import com.example.simbersofttest.data.source.entity.TaskEntity
 import com.example.simbersofttest.domain.repository.TaskRepository
+import com.example.simbersofttest.presentation.navigation.AppNavigation
 import com.example.simbersofttest.presentation.theme.SimbersoftTestTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -32,29 +34,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        lifecycleScope.launch {
-            val taskEntity= TaskEntity(
-                name = "Test",
-                description = "test description",
-                dateStart = 123456L,
-                dateFinish = 123456L
-            )
-
-
-            db.taskDao().insertTask(taskEntity)
-            println(db.taskDao().getTaskById(1))
-        }
-
         enableEdgeToEdge()
         setContent {
             SimbersoftTestTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                AppNavigation(rememberNavController())
             }
         }
     }
