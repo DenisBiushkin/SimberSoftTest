@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.simbersofttest.presentation.feature_main_calendar_list.model.CalendarDayUi
@@ -22,11 +23,12 @@ import com.example.simbersofttest.presentation.feature_main_calendar_list.model.
 @Composable
 fun DayItem(
     state: CalendarDayUi,
+    itemWidth: Dp,
     onClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
-            .width(55.dp)
+            .width(itemWidth)
             .height(75.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(if (state.isSelected) Color(0xFF2563EB) else Color(0xFFF1F5F9))
@@ -34,6 +36,7 @@ fun DayItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+
         Text(
             text = state.dayOfWeek,
             fontSize = 10.sp,

@@ -3,12 +3,15 @@ package com.example.simbersofttest.presentation.feature_main_calendar_list.viewm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.simbersofttest.domain.model.Task
 import com.example.simbersofttest.domain.repository.TaskRepository
 import com.example.simbersofttest.domain.usecases.GetTasksByDateUseCase
+import com.example.simbersofttest.presentation.feature_create_task.model.TaskCategoryUi
 import com.example.simbersofttest.presentation.feature_main_calendar_list.model.CalendarDayUi
 import com.example.simbersofttest.presentation.feature_main_calendar_list.model.CalendarListEvent
 import com.example.simbersofttest.presentation.feature_main_calendar_list.model.CalendarListVMState
 import com.example.simbersofttest.presentation.feature_main_calendar_list.model.CalendarUiEffect
+import com.example.simbersofttest.presentation.feature_main_calendar_list.model.TaskUi
 import com.example.simbersofttest.сonstants.CalendarTestData
 import com.example.simbersofttest.сonstants.TaskTestData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,10 +23,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAdjusters
+import java.time.temporal.TemporalQueries.localDate
 import java.util.Locale
 import javax.inject.Inject
 
@@ -33,7 +39,6 @@ import javax.inject.Inject
 //TODO если задач нет сделать добавление через нажатие на пустой элемент в списке
 class CalendarListViewModel  @Inject constructor(
     private val getTasksByDateUseCase: GetTasksByDateUseCase,
-    private val taskRepository: TaskRepository
 ): ViewModel() {
 
     private val _state = MutableStateFlow(CalendarListVMState())
@@ -103,24 +108,33 @@ class CalendarListViewModel  @Inject constructor(
     }
 
     private fun selectDay(dayNumber: Int) {
-        val currentDays = _state.value.calendarDaysUi
-        val updatedDays = currentDays.map { it.copy(isSelected = it.dayNumber == dayNumber) }
+        val state = _state.value
 
-        val selectedDate = Instant.ofEpochMilli(_state.value.selectedDateMillis)
+        val updatedZonedDateTime = Instant.ofEpochMilli(state.selectedDateMillis)
             .atZone(ZoneId.systemDefault())
             .withDayOfMonth(dayNumber)
-            .toInstant()
-            .toEpochMilli()
 
-        _state.update { it.copy(
-            calendarDaysUi = updatedDays,
-            selectedDateMillis = selectedDate
-        ) }
-        observeTasks(selectedDate)
+        val selectedDateMillis = updatedZonedDateTime.toInstant().toEpochMilli()
+        val localDate = updatedZonedDateTime.toLocalDate()
+
+        val updatedDays = state.calendarDaysUi.map { day ->
+            day.copy(isSelected = day.dayNumber == dayNumber)
+        }
+        _state.update {
+            it.copy(
+                calendarDaysUi = updatedDays,
+                selectedDateMillis = selectedDateMillis,
+                monthYearTitle = localDate.format(monthYearFormatter)
+            )
+        }
+        observeTasks(selectedDateMillis)
     }
 
     private fun updateDate(timestamp: Long) {
-        val localDate = Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).toLocalDate()
+        val localDate = Instant.ofEpochMilli(timestamp)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+
         _state.update { it.copy(
             selectedDateMillis = timestamp,
             monthYearTitle = localDate.format(monthYearFormatter),
@@ -133,9 +147,22 @@ class CalendarListViewModel  @Inject constructor(
         tasksJob?.cancel()//так то можно обойтись
         tasksJob = viewModelScope.launch {
             getTasksByDateUseCase(timestamp).collect { taskList ->
-                _state.update { it.copy(tasks = taskList) }
+                val taskUi = taskList.map { toTaskUi(it)}
+                _state.update { it.copy(tasks = taskUi) }
             }
         }
+    }
+    private fun toTaskUi(task: Task): TaskUi {
+        val uiCategory = TaskCategoryUi.fromDomain(task.category)
+        return TaskUi(
+            id = task.id,
+            dateStart = task.dateStart,
+            dateFinish = task.dateFinish,
+            name = task.name,
+            description = task.description,
+            category = uiCategory,
+            color = uiCategory.color
+        )
     }
 
     private fun generateDaysForMonth(date: LocalDate): List<CalendarDayUi> {
@@ -146,6 +173,23 @@ class CalendarListViewModel  @Inject constructor(
                 dayNumber = i,
                 dayOfWeek = current.format(DateTimeFormatter.ofPattern("EE", Locale("ru"))).uppercase(),
                 isSelected = i == date.dayOfMonth
+            )
+        }
+    }
+
+    //захватывает и пред месяц
+    //нужна более сложная логика
+    private fun generateDaysForWeek(selectedDate: LocalDate): List<CalendarDayUi> {
+        // Находим начало недели
+        // Если нужно с Воскресенье  DayOfWeek.SUNDAY
+        val startOfWeek = selectedDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+
+        return (0..6).map { i ->
+            val current = startOfWeek.plusDays(i.toLong())
+            CalendarDayUi(
+                dayNumber = current.dayOfMonth,
+                dayOfWeek = current.format(DateTimeFormatter.ofPattern("EE", Locale("ru"))).uppercase(),
+                isSelected = current.isEqual(selectedDate),
             )
         }
     }

@@ -30,9 +30,10 @@ fun TaskDetailsTopBar(
             }
         },
         actions = {
-            IconButton(onClick = onEdit) {
-                Icon(Icons.Default.Edit, contentDescription = "Редактировать", tint = Color(0xFF2563EB))
-            }
+            //Экрана реадктирвоания нет
+//            IconButton(onClick = onEdit) {
+//                Icon(Icons.Default.Edit, contentDescription = "Редактировать", tint = Color(0xFF2563EB))
+//            }
             IconButton(onClick = onDelete) {
                 Icon(Icons.Default.Delete, contentDescription = "Удалить", tint = Color.Red)
             }

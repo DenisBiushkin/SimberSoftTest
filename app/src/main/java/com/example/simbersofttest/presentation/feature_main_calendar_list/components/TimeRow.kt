@@ -22,13 +22,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.simbersofttest.domain.model.Task
+import com.example.simbersofttest.presentation.feature_main_calendar_list.model.TaskUi
 import java.util.Calendar
 
 @Composable
 fun TimeRow(
     hour: Int,
     //TODO переделать под TaskUi
-    tasks: List<Task>,
+    tasks: List<TaskUi>,
     onTaskClick: (Int) -> Unit
 ) {
     //TODO переделать
