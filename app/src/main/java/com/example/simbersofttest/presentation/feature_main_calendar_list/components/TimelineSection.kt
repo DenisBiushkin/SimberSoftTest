@@ -9,10 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.simbersofttest.domain.model.Task
+import com.example.simbersofttest.presentation.feature_main_calendar_list.model.TaskUi
 
 @Composable
 fun TimelineSection(
-    tasks: List<Task>,
+    tasks: List<TaskUi>,
     onTaskClick: (Int) -> Unit
 ) {
     LazyColumn(

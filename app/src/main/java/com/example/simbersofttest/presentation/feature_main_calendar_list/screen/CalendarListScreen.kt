@@ -82,6 +82,9 @@ fun CalendarListScreen(
                     days =state.value.calendarDaysUi,
                     onDayClick = { day ->
                         viewModel.onEvent(CalendarListEvent.OnDaySelected(day))
+                    },
+                    onNextPageClick = {
+
                     }
                 )
                 TimelineSection(

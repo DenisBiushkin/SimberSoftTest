@@ -18,10 +18,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.simbersofttest.domain.model.Task
+import com.example.simbersofttest.presentation.feature_main_calendar_list.model.TaskUi
 
 @Composable
 fun TaskCard(
-    task: Task,
+    task: TaskUi,
     onClick: () -> Unit
 ) {
     Surface(
@@ -29,7 +30,7 @@ fun TaskCard(
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
-        color = Color(0xFFDBEAFE),
+        color = task.color,
         border = null
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
